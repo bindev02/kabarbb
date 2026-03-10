@@ -139,143 +139,8 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 .spin-sm{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* ══ SIDEBAR COLLAPSIBLE ══ */
-#sidebar{width:240px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width 0.25s cubic-bezier(0.4,0,0.2,1);}
-#sidebar.collapsed{width:54px;}
-#sidebar.collapsed .sb-appname,
-#sidebar.collapsed .sb-tag,
-#sidebar.collapsed .p-name,
-#sidebar.collapsed .p-tag,
-#sidebar.collapsed .p-role,
-#sidebar.collapsed .p-edit,
-#sidebar.collapsed .nav-item>span:not(.nav-icon),
-#sidebar.collapsed .nbadge,
-#sidebar.collapsed .notif-badge,
-#sidebar.collapsed .nav-sec,
-#sidebar.collapsed .cat-item>span,
-#sidebar.collapsed .sb-footer .ft,
-#sidebar.collapsed .sb-footer .fd,
-#sidebar.collapsed .btn-logout span{display:none;}
-#sidebar.collapsed .nav-item{justify-content:center;padding:9px 0;}
-#sidebar.collapsed .profile-card{justify-content:center;padding:8px 6px;}
-#sidebar.collapsed .cat-item{justify-content:center;}
-#sidebar.collapsed .sb-toggle-btn-text{display:none;}
-/* Toggle button */
-.sb-toggle{position:absolute;top:12px;right:-13px;width:26px;height:26px;background:var(--panel);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;font-size:11px;color:var(--text3);transition:all 0.2s;box-shadow:2px 0 8px rgba(0,0,0,0.3);}
-.sb-toggle:hover{background:var(--card2);color:var(--text);border-color:var(--gold);}
-#sidebar{position:relative;}
-#sidebar.collapsed .sb-toggle{right:-14px;}
-
-/* ══ 5 TEMA DESAIN BERITA ══ */
-
-/* ─ Tema 1: DEFAULT (sudah ada, tidak perlu override) ─ */
-
-/* ─ Tema 2: MAGAZINE — editorial bergaya majalah ─ */
-.theme-magazine #panel-berita{background:#0a0b0f;}
-.theme-magazine .ticker-bar{background:linear-gradient(90deg,#1a1a2e,#16213e);border-bottom:2px solid var(--gold);}
-.theme-magazine .ticker-label{background:var(--gold);color:#0a0b0f;letter-spacing:0.2em;}
-.theme-magazine .hero-grid{grid-template-columns:1fr 1fr;border:none;gap:0;background:transparent;}
-.theme-magazine .hero-main{border-right:2px solid var(--gold);padding:28px 24px;background:#0d0e16;}
-.theme-magazine .hcat{background:transparent;color:var(--gold);border:1.5px solid var(--gold);font-size:8px;letter-spacing:0.2em;}
-.theme-magazine .htitle{font-size:28px;line-height:1.15;letter-spacing:-0.02em;}
-.theme-magazine .hero-side{background:#0d0e16;gap:0;}
-.theme-magazine .side-story{border-bottom:1px solid rgba(255,255,255,0.05);padding:16px 18px;}
-.theme-magazine .ss-cat{color:var(--gold);letter-spacing:0.18em;}
-.theme-magazine .ss-title{font-family:'Playfair Display',serif;font-size:13px;}
-.theme-magazine .news-grid{grid-template-columns:repeat(2,1fr);gap:0;background:transparent;}
-.theme-magazine .news-card{border-bottom:1px solid var(--border);border-right:1px solid var(--border);background:#0d0e16;padding:18px 20px;}
-.theme-magazine .ntitle{font-family:'Playfair Display',serif;font-size:14px;line-height:1.35;}
-.theme-magazine .filter-btn.active{background:transparent;color:var(--gold);border-color:var(--gold);}
-.theme-magazine .cat-filter{border-bottom:2px solid var(--gold);background:#0d0e16;}
-
-/* ─ Tema 3: NEON — cyberpunk gelap ─ */
-.theme-neon #panel-berita{background:#050508;}
-.theme-neon .ticker-bar{background:#050508;border-bottom:1px solid #00ff88;}
-.theme-neon .ticker-label{background:transparent;color:#00ff88;border-right:1px solid #00ff88;text-shadow:0 0 8px #00ff88;}
-.theme-neon .ticker-inner{color:#00ff88;text-shadow:0 0 6px rgba(0,255,136,0.7);}
-.theme-neon .hero-grid{background:#00ff88;gap:2px;}
-.theme-neon .hero-main{background:#0a0a14;padding:24px;}
-.theme-neon .hcat{background:#00ff88;color:#050508;border-radius:0;font-size:8.5px;letter-spacing:0.18em;}
-.theme-neon .htitle{color:#e0ffe8;text-shadow:0 0 20px rgba(0,255,136,0.15);}
-.theme-neon .htitle a{color:#e0ffe8;}
-.theme-neon .htitle a:hover{color:#00ff88;}
-.theme-neon .hero-side{background:#00ff88;gap:2px;}
-.theme-neon .side-story{background:#0a0a14;}
-.theme-neon .ss-cat{color:#00ff88;}
-.theme-neon .news-grid{background:#00ff88;gap:2px;}
-.theme-neon .news-card{background:#0a0a14;}
-.theme-neon .nsrc.kompas{color:#ff4466;}.theme-neon .nsrc.tempo{color:#4466ff;}.theme-neon .nsrc.detik{color:#ff8800;}
-.theme-neon .ntitle a:hover{color:#00ff88;}
-.theme-neon .read-more{color:#00ff88;}
-.theme-neon .filter-btn.active{background:#00ff88;color:#050508;border-color:#00ff88;}
-.theme-neon .filter-btn:hover{border-color:#00ff88;color:#00ff88;}
-.theme-neon .cat-filter{background:#0a0a14;border-bottom:1px solid #00ff88;}
-
-/* ─ Tema 4: NEWSPAPER — koran hitam-putih klasik ─ */
-.theme-newspaper #panel-berita{background:#f5f0e8;}
-.theme-newspaper,.theme-newspaper .news-card,.theme-newspaper .hero-main,.theme-newspaper .side-story{color:#1a1208;}
-.theme-newspaper .ticker-bar{background:#1a1208;}
-.theme-newspaper .ticker-label{background:#e8b84b;color:#1a1208;}
-.theme-newspaper .ticker-inner{color:#f5f0e8;}
-.theme-newspaper .hero-grid{background:#1a1208;gap:1px;}
-.theme-newspaper .hero-main{background:#f5f0e8;padding:24px 28px;}
-.theme-newspaper .hcat{background:#1a1208;color:#f5f0e8;border-radius:0;}
-.theme-newspaper .htitle{font-size:26px;letter-spacing:-0.01em;color:#1a1208;}
-.theme-newspaper .htitle a{color:#1a1208;}
-.theme-newspaper .htitle a:hover{color:#8b4513;}
-.theme-newspaper .hdesc{color:#3d2b1f;font-style:italic;}
-.theme-newspaper .hmeta{color:#6b5344;}
-.theme-newspaper .hmeta a{color:#8b4513;}
-.theme-newspaper .hero-side{background:#1a1208;}
-.theme-newspaper .side-story{background:#ece8df;border-bottom:1px solid #c8bfaf;}
-.theme-newspaper .ss-cat{color:#8b4513;}
-.theme-newspaper .ss-title{color:#1a1208;}
-.theme-newspaper .ss-meta{color:#6b5344;}
-.theme-newspaper .news-grid{background:#c8bfaf;gap:1px;}
-.theme-newspaper .news-card{background:#f5f0e8;padding:16px 18px;}
-.theme-newspaper .ntitle{color:#1a1208;font-family:'Playfair Display',serif;}
-.theme-newspaper .ntitle a{color:#1a1208;}
-.theme-newspaper .ntitle a:hover{color:#8b4513;}
-.theme-newspaper .ndesc{color:#3d2b1f;}
-.theme-newspaper .nsrc.kompas{color:#cc2222;}.theme-newspaper .nsrc.tempo{color:#0044aa;}.theme-newspaper .nsrc.detik{color:#cc5500;}
-.theme-newspaper .ntime{color:#6b5344;}
-.theme-newspaper .ncp{opacity:0.8;}
-.theme-newspaper .cat-filter{background:#ece8df;border-bottom:2px solid #1a1208;}
-.theme-newspaper .filter-btn{border-color:#c8bfaf;color:#3d2b1f;}
-.theme-newspaper .filter-btn:hover{border-color:#8b4513;color:#8b4513;}
-.theme-newspaper .filter-btn.active{background:#1a1208;color:#f5f0e8;border-color:#1a1208;}
-.theme-newspaper .read-more{color:#8b4513;}
-.theme-newspaper .news-loading{color:#3d2b1f;}
-.theme-newspaper .ticker-bar .ticker-inner{color:#f0ebe0;}
-
-/* ─ Tema 5: MINIMAL — clean abu-abu minimalis ─ */
-.theme-minimal #panel-berita{background:#0c0d10;}
-.theme-minimal .ticker-bar{background:#111318;border-bottom:1px solid #2a2d3a;}
-.theme-minimal .ticker-label{background:#2a2d3a;color:#8896b3;font-size:8px;letter-spacing:0.2em;}
-.theme-minimal .ticker-inner{color:#8896b3;}
-.theme-minimal .hero-grid{background:#1e2333;gap:1px;}
-.theme-minimal .hero-main{background:#0c0d10;padding:32px 28px;}
-.theme-minimal .hcat{background:rgba(136,150,179,0.1);color:#8896b3;border:1px solid rgba(136,150,179,0.2);border-radius:2px;font-size:8px;letter-spacing:0.2em;}
-.theme-minimal .htitle{font-size:24px;font-weight:800;letter-spacing:-0.015em;line-height:1.2;}
-.theme-minimal .hero-side{background:#0c0d10;}
-.theme-minimal .side-story{padding:14px 16px;border-bottom:1px solid #1e2333;}
-.theme-minimal .news-grid{grid-template-columns:repeat(4,1fr);background:#1e2333;gap:1px;}
-.theme-minimal .news-card{background:#0c0d10;padding:16px;}
-.theme-minimal .ntitle{font-size:11.5px;font-weight:600;}
-.theme-minimal .filter-btn{border-radius:3px;}
-.theme-minimal .filter-btn.active{background:#2a2d3a;color:var(--text);border-color:#2a2d3a;}
-.theme-minimal .cat-filter{background:#0c0d10;border-bottom:1px solid #1e2333;}
-.theme-minimal .read-more{color:#8896b3;}
-.theme-minimal .read-more:hover{color:var(--text);}
-
-/* Theme indicator badge */
-.theme-badge{
-  position:absolute;bottom:8px;right:8px;
-  font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  background:rgba(0,0,0,0.4);color:rgba(255,255,255,0.3);
-  padding:2px 7px;border-radius:4px;pointer-events:none;
-  font-family:'JetBrains Mono',monospace;
-}
+/* ══ SIDEBAR ══ */
+#sidebar{width:240px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .sb-globe{width:34px;height:34px;background:linear-gradient(135deg,#1a3a6e,#0f2450);border:1.5px solid rgba(59,130,246,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;animation:gg 3s ease-in-out infinite;}
 .sb-appname{font-family:'Playfair Display',serif;font-size:14px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -472,14 +337,6 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 .msg-row{position:relative;}
 .msg-act-btn{font-size:12px;cursor:pointer;padding:2px 4px;border-radius:4px;transition:background 0.15s;}
 .msg-act-btn:hover{background:var(--card2);}
-/* Bubble right-click context menu */
-#msg-ctx-menu{display:none;position:fixed;background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:5px;min-width:170px;z-index:500;box-shadow:0 8px 28px rgba(0,0,0,0.55);}
-#msg-ctx-menu.show{display:block;}
-.msg-ctx-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:7px;font-size:12.5px;cursor:pointer;color:var(--text2);transition:background 0.15s;}
-.msg-ctx-item:hover{background:var(--card2);color:var(--text);}
-.msg-ctx-item.danger{color:#fca5a5;}
-.msg-ctx-item.danger:hover{background:rgba(239,68,68,0.1);color:#f87171;}
-.msg-ctx-sep{height:1px;background:var(--border);margin:3px 0;}
 #chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
 .chat-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0;}
 .ct-info{display:flex;align-items:center;gap:10px;}
@@ -894,12 +751,7 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 
 @media(max-width:960px){#members-panel{display:none;}}
 @media(max-width:760px){#conv-list{width:58px;}.conv-info,.conv-meta,.conv-sec-label,.conv-search,.conv-header-title{display:none;}.conv-item{justify-content:center;padding:8px;}.conv-av{margin:0;}}
-@media(max-width:620px){
-  #sidebar:not(.collapsed){width:200px;}
-  .news-grid{grid-template-columns:1fr;}
-  .hero-grid{grid-template-columns:1fr;}
-  .theme-minimal .news-grid{grid-template-columns:1fr;}
-}
+@media(max-width:620px){#sidebar{width:50px;}.sb-appname,.sb-tag,.p-name,.p-role,.p-edit,.nav-item span:not(.nav-icon),.nbadge,.nav-sec,.cat-item span,.sb-footer .ft,.sb-footer .fd,.btn-logout span{display:none;}.nav-item{justify-content:center;}.profile-card{justify-content:center;}.news-grid{grid-template-columns:1fr;}.hero-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -967,8 +819,6 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 <!-- ══ MAIN APP ══ -->
 <div id="app">
   <nav id="sidebar">
-    <!-- Tombol lipat/buka sidebar -->
-    <div class="sb-toggle" id="sb-toggle-btn" onclick="toggleSidebar()" title="Tutup/buka sidebar">‹</div>
     <div class="sb-logo">
       <div class="sb-globe">🗺️</div>
       <div><div class="sb-appname">Berita Bintang</div><div class="sb-tag">Kabar Terkini</div></div>
@@ -1021,14 +871,12 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
       <div class="ttab" onclick="showToast('Segera hadir!')"><span>📡</span> Breaking News</div>
       <div class="topbar-right">
         <div class="search-bar"><span>🔍</span><input type="text" placeholder="Cari berita..." oninput="searchNews(this.value)"></div>
-        <div class="icon-btn" title="Ganti tema tampilan" onclick="cycleNewsTheme()" style="font-size:13px;">🎨</div>
         <div class="icon-btn" onclick="loadNews()">🔄</div>
       </div>
     </div>
 
     <!-- BERITA -->
-    <div class="tab-panel active" id="panel-berita" style="position:relative;">
-      <div class="theme-badge" id="theme-badge">tema 1</div>
+    <div class="tab-panel active" id="panel-berita">
       <div class="ticker-bar"><div class="ticker-label">🔴 TERKINI</div><div class="ticker-track"><div class="ticker-inner" id="ticker-text"><span>Memuat...</span></div></div></div>
       <div class="hero-grid">
         <div class="hero-main" id="hero-main"><div class="news-loading"><div class="spin"></div><span>Memuat...</span></div></div>
@@ -1049,7 +897,7 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
     <!-- CHAT -->
     <div class="tab-panel" id="panel-chat">
       <div id="conv-list">
-        <div class="conv-header"><div class="conv-header-title">💬 Pesan</div><button class="new-dm-btn" onclick="openSearchTagModal()" title="Cari user via tag">🏷️</button></div>
+        <div class="conv-header"><div class="conv-header-title">💬 Pesan</div><button class="new-dm-btn" onclick="openSearchTagModal()" title="Cari user via tag">🏷️</button><button class="new-dm-btn" onclick="openDMModal()" title="User online">＋</button></div>
         <div class="conv-search"><input type="text" placeholder="Cari..." oninput="filterConvs(this.value)"></div>
         <div class="conv-list-inner" id="conv-list-inner"></div>
       </div>
@@ -1058,7 +906,7 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
           <div class="ces-icon">🗺️</div>
           <div class="ces-title">Pilih percakapan</div>
           <div class="ces-sub">Buka grup diskusi atau mulai chat privat baru.</div>
-          <button class="ces-btn" onclick="openSearchTagModal()">🏷️ Cari via Tag</button>
+          <button class="ces-btn" onclick="openDMModal()">＋ Chat Privat</button>
         </div>
         <div id="active-chat" style="display:none;flex-direction:column;height:100%;">
           <div class="chat-topbar">
@@ -1188,14 +1036,6 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
   </div>
 
 </div><!-- end #app -->
-
-<!-- MSG RIGHT-CLICK CONTEXT MENU -->
-<div id="msg-ctx-menu">
-  <div class="msg-ctx-item" id="msg-ctx-copy" onclick="msgCtxCopy()">📋 Salin Teks</div>
-  <div class="msg-ctx-sep"></div>
-  <div class="msg-ctx-item danger" id="msg-ctx-del-me" onclick="msgCtxDeleteMe()">🗑️ Hapus untuk Saya</div>
-  <div class="msg-ctx-item danger" id="msg-ctx-del-all" onclick="msgCtxDeleteAll()" style="display:none">🗑️ Hapus untuk Semua</div>
-</div>
 <div id="announce-popup">
   <div class="announce-card">
     <div class="announce-icon-big">📣</div>
@@ -1349,78 +1189,6 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
   tick();setInterval(tick,1000);
 })();
 
-// ════ SIDEBAR TOGGLE ════
-let sidebarCollapsed = false;
-function toggleSidebar(){
-  sidebarCollapsed = !sidebarCollapsed;
-  const sb = document.getElementById('sidebar');
-  const btn = document.getElementById('sb-toggle-btn');
-  sb.classList.toggle('collapsed', sidebarCollapsed);
-  btn.textContent = sidebarCollapsed ? '›' : '‹';
-  btn.title = sidebarCollapsed ? 'Buka sidebar' : 'Tutup sidebar';
-  try { localStorage.setItem('bb_sb_collapsed', sidebarCollapsed ? '1' : '0'); } catch(_){}
-}
-// Restore collapsed state from localStorage
-try {
-  if (localStorage.getItem('bb_sb_collapsed') === '1') {
-    sidebarCollapsed = true;
-    document.getElementById('sidebar').classList.add('collapsed');
-    const btn = document.getElementById('sb-toggle-btn');
-    if (btn) { btn.textContent = '›'; btn.title = 'Buka sidebar'; }
-  }
-} catch(_){}
-
-// ════ NEWS THEME SYSTEM (5 tema random per user) ════
-const NEWS_THEMES = [
-  { id: 'default',    name: 'Klasik',     cls: '' },
-  { id: 'magazine',   name: 'Majalah',    cls: 'theme-magazine' },
-  { id: 'neon',       name: 'Neon',       cls: 'theme-neon' },
-  { id: 'newspaper',  name: 'Koran',      cls: 'theme-newspaper' },
-  { id: 'minimal',    name: 'Minimal',    cls: 'theme-minimal' },
-];
-
-let currentThemeIdx = 0;
-
-function pickUserTheme(uid){
-  // Pilih tema berdasarkan UID — konsisten untuk user yang sama
-  if (!uid) return 0;
-  let h = 0;
-  for (const c of uid) h = (h * 31 + c.charCodeAt(0)) % NEWS_THEMES.length;
-  return h;
-}
-
-function applyNewsTheme(idx){
-  currentThemeIdx = idx;
-  const main = document.getElementById('main');
-  if (!main) return;
-  // Hapus semua theme class
-  NEWS_THEMES.forEach(t => { if (t.cls) main.classList.remove(t.cls); });
-  const theme = NEWS_THEMES[idx];
-  if (theme.cls) main.classList.add(theme.cls);
-  // Update badge
-  const badge = document.getElementById('theme-badge');
-  if (badge) badge.textContent = `tema: ${theme.name.toLowerCase()}`;
-}
-
-function initNewsTheme(){
-  if (!currentUser) return;
-  const uid = currentUser.uid;
-  // Cek apakah sudah ada preferensi tersimpan di localStorage
-  let idx;
-  try {
-    const saved = localStorage.getItem('bb_news_theme_' + uid);
-    if (saved !== null) {
-      idx = parseInt(saved);
-    } else {
-      idx = pickUserTheme(uid);
-      localStorage.setItem('bb_news_theme_' + uid, idx);
-    }
-  } catch(_) {
-    idx = pickUserTheme(uid);
-  }
-  applyNewsTheme(idx);
-}
-
 // ════ TABS ════
 function switchTab(tab,navEl){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
@@ -1560,11 +1328,7 @@ let audioCtx=null;            // Web Audio for notification sound
 function getUserColor(uid){return COLORS[([...uid].reduce((h,c)=>h*31+c.charCodeAt(0),0))%COLORS.length];}
 function getUserDisplayName(){return currentUser?.displayName||currentUser?.email?.split('@')[0]||'User';}
 function getUserColor2(){return getUserColor(currentUser?.uid||'x');}
-function getUserTag(){
-  if(!userTagData)return'@...';
-  if(currentUser?.email===DEV_EMAIL)return'@BINDEV#123';
-  return`@${userTagData.tag}#${userTagData.tagNum}`;
-}
+function getUserTag(){return userTagData?`@${userTagData.tag}#${userTagData.tagNum}`:'@...';}
 
 // ════ TAG SYSTEM ════
 function genTagNum(uid){
@@ -1577,24 +1341,16 @@ function slugify(s){return s.toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20)
 async function loadUserTag(){
   if(!currentUser||!window._db)return;
   const db=window._db;
-
-  // Dev account: tag selalu BINDEV123, tidak bisa diubah
-  if(currentUser.email===DEV_EMAIL){
-    userTagData={tag:'BINDEV',tagNum:'123',lastChanged:0,locked:true};
-    await db.ref('bb/tags/'+currentUser.uid).set(userTagData);
-    await db.ref('bb/tagIndex/BINDEV_123').set({uid:currentUser.uid,name:getUserDisplayName(),color:getUserColor2()});
-    updateSidebarProfile();
-    return;
-  }
-
   const snap=await db.ref('bb/tags/'+currentUser.uid).once('value');
   if(snap.exists()){
     userTagData=snap.val();
   } else {
+    // First time: create tag from displayName
     const base=slugify(getUserDisplayName());
     const num=genTagNum(currentUser.uid);
     userTagData={tag:base,tagNum:num,lastChanged:0};
     await db.ref('bb/tags/'+currentUser.uid).set(userTagData);
+    // Also index by tag for search
     await db.ref(`bb/tagIndex/${base}_${num}`).set({uid:currentUser.uid,name:getUserDisplayName(),color:getUserColor2()});
   }
   updateSidebarProfile();
@@ -1834,7 +1590,6 @@ window.addEventListener('auth-login', async e => {
   initPresence();
   autoJoinPublicGroup();
   buildConvList();
-  initNewsTheme(); // terapkan tema berita personal
   setTimeout(()=>{
     initBackgroundNotifs();
     notifInitDone=true; // aktifkan notif setelah 2.5 detik (skip pesan lama)
@@ -2047,15 +1802,15 @@ function buildConvList(){
       </div>`);
   }
 
-  // Hanya tampilkan DM yang sudah pernah di-mulai (persistedDMs saja)
-  // Online members TIDAK otomatis masuk DM list — harus cari via tag
-  const dmMap=new Map();
+  // Merge: online + persisted DMs (tidak duplikat)
+  const dmMap=new Map(); // uid → data
+  // 1. Persisted DMs dulu
   Object.values(persistedDMs).forEach(m=>{
-    if(m.uid!==currentUser.uid){
-      // Update isOnline status dari onlineMembers
-      const isOnline=onlineMembers.some(o=>o.uid===m.uid);
-      dmMap.set(m.uid,{...m,isOnline});
-    }
+    if(m.uid!==currentUser.uid) dmMap.set(m.uid,{...m,isOnline:false});
+  });
+  // 2. Online members override/tambah
+  onlineMembers.filter(m=>m.uid!==currentUser.uid).forEach(m=>{
+    dmMap.set(m.uid,{...m,isOnline:true});
   });
 
   const dmList=[...dmMap.values()].filter(m=>{
@@ -2261,7 +2016,7 @@ function renderMsg(m,msgKey){
     <div class="msg-av" style="background:${bg};color:${tc}">${ini(m.sender)}</div>
     <div class="msg-content">
       ${!mine&&!isConsec?`<div class="msg-sender" style="color:${color}">${escH(m.sender||'')}</div>`:''}
-      <div class="msg-bubble" oncontextmenu="showMsgCtx(event,'${msgKey||''}','${mine}','${escH(m.text||'').replace(/'/g,"\\'")}',${mine||isDev})">${escH(m.text).replace(/\n/g,'<br>')}</div>
+      <div class="msg-bubble">${escH(m.text).replace(/\n/g,'<br>')}</div>
       <div class="msg-meta"><span class="msg-time">${ts}</span></div>
     </div>
     ${adminActions}`;
@@ -2300,7 +2055,7 @@ function renderMembersPanel(members){
     const isMe=m.uid===currentUser?.uid;
     const bg=`linear-gradient(135deg,${m.color},${m.color}88)`;
     const tc=isLight(m.color)?'#1a1a1a':'#fff';
-    return`<div class="member-item" onclick="${isMe?'openEditProfile()':(`showToast('Cari tag mereka via 🏷️ untuk chat')`)}">
+    return`<div class="member-item" onclick="${isMe?'openEditProfile()':(`openConv({type:'dm',id:'`+dmKey(currentUser.uid,m.uid)+`',name:'`+escH(m.name)+`',color:'`+m.color+`',peerUid:'`+m.uid+`'})`)}">
       <div class="member-av" style="background:${bg};color:${tc}">${getMemberAvHtml(m)}</div>
       <div class="member-name">${escH(m.name)}</div>
       ${isMe?'<div class="member-you">kamu</div>':'<div class="member-dot"></div>'}
@@ -2335,7 +2090,7 @@ async function loadAllMembers(){
       const bg=`linear-gradient(135deg,${m.color||'#3b82f6'},${(m.color||'#3b82f6')}88)`;
       const tc=isLight(m.color||'#3b82f6')?'#1a1a1a':'#fff';
       const tagDisp=m.tag?`<div class="all-member-tag">${escH(m.tag)}</div>`:'';
-      return`<div class="all-member-item" onclick="${isMe?'openEditProfile()':(`showToast('Cari tag @`+escH(m.name||'User')+` untuk mulai chat 🏷️')`)}">
+      return`<div class="all-member-item" onclick="${isMe?'openEditProfile()':(`openConv({type:'dm',id:'`+dmKey(currentUser.uid,m.uid)+`',name:'`+escH(m.name||'User')+`',color:'`+(m.color||'#3b82f6')+`',peerUid:'`+m.uid+`'})`)}">
         <div class="all-member-av" style="background:${bg};color:${tc}">${m.avatarData?`<img src="${m.avatarData}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`:ini(m.name||'U')}</div>
         <div class="all-member-info">
           <div class="all-member-name">${escH(m.name||'User')}${isMe?' (kamu)':''}</div>
@@ -2357,7 +2112,7 @@ function renderOnlineUsersInModal(members){
   list.innerHTML=others.map(m=>{
     const bg=`linear-gradient(135deg,${m.color},${m.color}88)`;
     const tc=isLight(m.color)?'#1a1a1a':'#fff';
-    return`<div class="ou-item" onclick="showToast('Cari tag mereka via 🏷️ untuk mulai chat')">
+    return`<div class="ou-item" onclick="startDM('${m.uid}','${escH(m.name)}','${m.color}')">
       <div class="ou-av" style="background:${bg};color:${tc}">${ini(m.name)}</div>
       <div style="flex:1;"><div class="ou-name">${escH(m.name)}</div>${m.tag?`<div class="ou-tag">${escH(m.tag)}</div>`:''}</div>
       <div class="ou-badge">● online</div>
@@ -2377,6 +2132,9 @@ function startDM(uid,name,color){
   switchTab('chat');
 }
 
+// Close context menu on outside click
+document.addEventListener('click',()=>closeConvMenu());
+
 // ════ EDIT PROFILE ════
 let epSelectedColor=null;
 let epAvatarData=null; // base64
@@ -2392,27 +2150,17 @@ function openEditProfile(){
   tagInput.value=userTagData?.tag||slugify(getUserDisplayName());
   const num=userTagData?.tagNum||'';
   document.getElementById('ep-tag-preview').textContent=`→ @${tagInput.value}#${num}`;
-
-  // Dev: tag locked permanently
-  if(currentUser?.email===DEV_EMAIL){
-    tagInput.value='BINDEV';
+  const cd=tagCooldownRemaining();
+  const cdEl=document.getElementById('ep-cooldown');
+  if(cd>0){
+    cdEl.textContent=`⏳ Tag bisa diubah lagi dalam ${formatCooldown(cd)}`;
+    cdEl.classList.add('show');
     tagInput.disabled=true;
-    document.getElementById('ep-tag-preview').textContent='→ @BINDEV#123';
-    document.getElementById('ep-tag-lock').textContent='terkunci permanen';
-    document.getElementById('ep-cooldown').classList.remove('show');
+    document.getElementById('ep-tag-lock').textContent='terkunci';
   } else {
-    const cd=tagCooldownRemaining();
-    const cdEl=document.getElementById('ep-cooldown');
-    if(cd>0){
-      cdEl.textContent=`⏳ Tag bisa diubah lagi dalam ${formatCooldown(cd)}`;
-      cdEl.classList.add('show');
-      tagInput.disabled=true;
-      document.getElementById('ep-tag-lock').textContent='terkunci';
-    } else {
-      cdEl.classList.remove('show');
-      tagInput.disabled=false;
-      document.getElementById('ep-tag-lock').textContent='';
-    }
+    cdEl.classList.remove('show');
+    tagInput.disabled=false;
+    document.getElementById('ep-tag-lock').textContent='';
   }
 
   // Avatar preview
@@ -2652,57 +2400,10 @@ function adminDeleteMsg(msgKey){
   if(!isDev||!window._db||!msgKey)return;
   if(!confirm('Hapus pesan ini untuk semua orang?'))return;
   window._db.ref(`bb/chats/${PUBLIC_GROUP_ID}/messages/${msgKey}`).remove();
+  // Remove from UI
   document.querySelectorAll(`.msg-row[data-msg-key="${msgKey}"]`).forEach(el=>el.remove());
   showToast('Pesan dihapus 🗑️');
 }
-
-// ════ MSG RIGHT-CLICK CONTEXT MENU ════
-let _msgCtx={key:'',mine:false,text:'',canDelAll:false};
-
-function showMsgCtx(e, key, mineStr, text, canDelAllStr){
-  e.preventDefault();
-  e.stopPropagation();
-  const mine = mineStr==='true'||mineStr===true;
-  const canDelAll = canDelAllStr===true||canDelAllStr==='true';
-  _msgCtx={key,mine,text,canDelAll};
-  const menu=document.getElementById('msg-ctx-menu');
-  // Show "hapus untuk semua" only for own messages or dev
-  document.getElementById('msg-ctx-del-all').style.display=(mine||isDev)&&key?'flex':'none';
-  menu.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
-  menu.style.top=Math.min(e.clientY,window.innerHeight-130)+'px';
-  menu.classList.add('show');
-}
-function closeMsgCtx(){document.getElementById('msg-ctx-menu').classList.remove('show');}
-
-function msgCtxCopy(){
-  if(_msgCtx.text)navigator.clipboard.writeText(_msgCtx.text).then(()=>showToast('Disalin! 📋'));
-  closeMsgCtx();
-}
-
-function msgCtxDeleteMe(){
-  // Hapus hanya dari tampilan lokal (hidden via deletedTs trick)
-  if(!_msgCtx.key){closeMsgCtx();return;}
-  const rows=document.querySelectorAll(`.msg-row[data-msg-key="${_msgCtx.key}"]`);
-  rows.forEach(el=>el.remove());
-  showToast('Pesan disembunyikan untuk kamu 👁️');
-  closeMsgCtx();
-}
-
-function msgCtxDeleteAll(){
-  if(!_msgCtx.key||!window._db){closeMsgCtx();return;}
-  if(!confirm('Hapus pesan ini untuk semua orang? Tidak bisa dikembalikan.'))return;
-  const convId=activeConv?.id;
-  if(!convId){closeMsgCtx();return;}
-  window._db.ref(`bb/chats/${convId}/messages/${_msgCtx.key}`).remove();
-  document.querySelectorAll(`.msg-row[data-msg-key="${_msgCtx.key}"]`).forEach(el=>el.remove());
-  showToast('Pesan dihapus untuk semua 🗑️');
-  closeMsgCtx();
-}
-
-document.addEventListener('click', e=>{
-  if(!e.target.closest('#msg-ctx-menu')) closeMsgCtx();
-  if(!e.target.closest('#conv-ctx-menu')) closeConvMenu();
-});
 
 // ════ PERSIST DMs ════
 function savePersistedDMs(){
@@ -2906,13 +2607,6 @@ async function deleteUpdate(key){
   showToast('Update dihapus.');
 }
 
-function cycleNewsTheme(){
-  const next = (currentThemeIdx + 1) % NEWS_THEMES.length;
-  applyNewsTheme(next);
-  try { localStorage.setItem('bb_news_theme_' + currentUser?.uid, next); } catch(_){}
-  showToast(`Tema: ${NEWS_THEMES[next].name} 🎨`);
-}
-
 // ════ TOAST ════
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
@@ -3054,9 +2748,9 @@ function insertEmoji(em){
 document.addEventListener('click',e=>{
   if(emojiPickerOpen&&!e.target.closest('#emoji-picker')&&!e.target.closest('.emoji-btn')){
     emojiPickerOpen=false;
-    const ep=document.getElementById('emoji-picker');
-    if(ep)ep.classList.remove('show');
+    document.getElementById('emoji-picker').classList.remove('show');
   }
+  closeConvMenu();
 });
 
 // ════ NOTIFICATION PANEL SYSTEM ════
@@ -3254,23 +2948,13 @@ function loadRsbMenfess(){
 }
 
 async function postRsbMenfess(){
-  const inp = document.getElementById('rsb-menfess-input');
-  const text = inp.value.trim();
+  const text = document.getElementById('rsb-menfess-input').value.trim();
   if (!text || !currentUser || !window._db) { showToast('Tulis dulu menfessnya!'); return; }
   const {emoji, name, anonId} = getMyAnonIdentity();
-  const btn = document.querySelector('.rsb-menfess-send');
-  if(btn){btn.disabled=true;btn.textContent='Mengirim...';}
-  try{
-    await window._db.ref('bb/menfess').push({text, emoji, name, anonId, ts: Date.now(), reactions: {}});
-    inp.value = '';
-    inp.style.height='';
-    document.getElementById('rsb-menfess-char').textContent = '0/500';
-    showToast('Menfess dikirim secara anonim! 🎭');
-  }catch(err){
-    showToast('Gagal kirim, coba lagi.');
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='Kirim 🎭';}
-  }
+  await window._db.ref('bb/menfess').push({text, emoji, name, anonId, ts: Date.now(), reactions: {}});
+  document.getElementById('rsb-menfess-input').value = '';
+  document.getElementById('rsb-menfess-char').textContent = '0/500';
+  showToast('Menfess dikirim secara anonim! 🎭');
 }
 
 // ════ RSB ANNOUNCE ════
@@ -3402,23 +3086,13 @@ function loadMenfess(){
 }
 
 async function postSbMenfess(){
-  const inp=document.getElementById('sb-menfess-input');
-  const text=inp.value.trim();
+  const text=document.getElementById('sb-menfess-input').value.trim();
   if(!text||!currentUser||!window._db){showToast('Tulis dulu menfessnya!');return;}
   const {emoji,name,anonId}=getMyAnonIdentity();
-  const btn=document.querySelector('.sb-menfess-send');
-  if(btn){btn.disabled=true;btn.textContent='...';}
-  try{
-    await window._db.ref('bb/menfess').push({text,emoji,name,anonId,ts:Date.now(),reactions:{}});
-    inp.value='';
-    inp.style.height='';
-    document.getElementById('sb-menfess-char').textContent='0/500';
-    showToast('Menfess dikirim secara anonim! 🎭');
-  }catch(err){
-    showToast('Gagal kirim, coba lagi.');
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='Kirim 🎭';}
-  }
+  await window._db.ref('bb/menfess').push({text,emoji,name,anonId,ts:Date.now(),reactions:{}});
+  document.getElementById('sb-menfess-input').value='';
+  document.getElementById('sb-menfess-char').textContent='0/500';
+  showToast('Menfess dikirim secara anonim! 🎭');
 }
 
 async function reactMenfess(key,emoji){
