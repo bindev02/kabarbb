@@ -900,7 +900,56 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
   .hero-grid{grid-template-columns:1fr;}
   .theme-minimal .news-grid{grid-template-columns:1fr;}
 }
-</style>
+
+/* ══ CHAT THEMES ══ */
+#chat-main.ct-romance .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#f43f5e,#e11d48)!important;box-shadow:0 2px 10px rgba(244,63,94,0.4)!important;}
+#chat-main.ct-romance .messages-area{background:radial-gradient(ellipse at bottom,rgba(244,63,94,0.04) 0%,transparent 70%);}
+#chat-main.ct-adventure .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#16a34a,#15803d)!important;box-shadow:0 2px 10px rgba(22,163,74,0.4)!important;}
+#chat-main.ct-adventure .messages-area{background:radial-gradient(ellipse at bottom,rgba(22,163,74,0.04) 0%,transparent 70%);}
+#chat-main.ct-galaxy .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#7c3aed,#4f46e5)!important;box-shadow:0 2px 10px rgba(124,58,237,0.4)!important;}
+#chat-main.ct-galaxy .messages-area{background:radial-gradient(ellipse at center,rgba(79,46,229,0.06) 0%,transparent 70%);}
+#chat-main.ct-ocean .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#0891b2,#0e7490)!important;box-shadow:0 2px 10px rgba(8,145,178,0.4)!important;}
+#chat-main.ct-ocean .messages-area{background:radial-gradient(ellipse at bottom,rgba(8,145,178,0.05) 0%,transparent 70%);}
+#chat-main.ct-sunset .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#f97316,#ea580c)!important;box-shadow:0 2px 10px rgba(249,115,22,0.4)!important;}
+#chat-main.ct-sunset .messages-area{background:radial-gradient(ellipse at bottom,rgba(249,115,22,0.04) 0%,transparent 70%);}
+#chat-main.ct-sakura .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#ec4899,#db2777)!important;box-shadow:0 2px 10px rgba(236,72,153,0.4)!important;}
+#chat-main.ct-sakura .messages-area{background:radial-gradient(ellipse at bottom,rgba(236,72,153,0.04) 0%,transparent 70%);}
+#chat-main.ct-hacker .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#16a34a,#052e16)!important;border:1px solid #16a34a!important;}
+#chat-main.ct-hacker .msg-row.theirs .msg-bubble{background:#0a0a0a!important;border:1px solid #16a34a!important;color:#4ade80!important;}
+#chat-main.ct-hacker .messages-area{background:#050505;}
+#chat-main.ct-gold .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#d97706,#b45309)!important;box-shadow:0 2px 10px rgba(217,119,6,0.4)!important;}
+#chat-main.ct-gold .messages-area{background:radial-gradient(ellipse at bottom,rgba(217,119,6,0.04) 0%,transparent 70%);}
+#chat-main.ct-neon .msg-row.mine .msg-bubble{background:linear-gradient(135deg,#06b6d4,#0891b2)!important;box-shadow:0 0 16px rgba(6,182,212,0.5)!important;}
+#chat-main.ct-neon .msg-row.theirs .msg-bubble{border-color:rgba(6,182,212,0.3)!important;}
+#chat-main.ct-neon .messages-area{background:radial-gradient(ellipse at center,rgba(6,182,212,0.03) 0%,transparent 70%);}
+
+/* Theme Picker Modal */
+#theme-picker-modal{display:none;position:fixed;inset:0;background:rgba(8,9,13,0.88);backdrop-filter:blur(12px);z-index:400;align-items:center;justify-content:center;}
+#theme-picker-modal.show{display:flex;}
+.tp-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:24px;width:90%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.tp-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
+.tp-sub{font-size:11.5px;color:var(--text3);margin-bottom:18px;}
+.tp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.tp-item{border:2px solid var(--border2);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:10px;}
+.tp-item:hover{border-color:var(--blue);transform:translateY(-1px);}
+.tp-item.active{border-color:var(--blue);background:rgba(59,130,246,0.08);}
+.tp-swatch{width:32px;height:32px;border-radius:8px;flex-shrink:0;}
+.tp-name{font-size:12.5px;font-weight:700;}
+.tp-desc{font-size:10.5px;color:var(--text3);margin-top:1px;}
+.tp-close{margin-top:16px;width:100%;padding:9px;background:var(--card2);border:1px solid var(--border2);border-radius:9px;color:var(--text2);font-family:'Mulish',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;}
+.tp-close:hover{border-color:var(--blue);color:var(--text);}
+
+/* Contact Us Modal */
+#contact-modal{display:none;position:fixed;inset:0;background:rgba(8,9,13,0.88);backdrop-filter:blur(12px);z-index:400;align-items:center;justify-content:center;}
+#contact-modal.show{display:flex;}
+.cu-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:28px 24px;width:90%;max-width:360px;text-align:center;}
+.cu-icon{font-size:44px;margin-bottom:12px;}
+.cu-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.cu-sub{font-size:12px;color:var(--text3);margin-bottom:20px;line-height:1.6;}
+.cu-link{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;background:linear-gradient(135deg,#e1306c,#c13584);border-radius:12px;color:white;text-decoration:none;font-weight:700;font-size:13px;transition:all 0.18s;margin-bottom:10px;}
+.cu-link:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(225,48,108,0.4);}
+.cu-close{width:100%;padding:9px;background:var(--card2);border:1px solid var(--border2);border-radius:9px;color:var(--text2);font-family:'Mulish',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;margin-top:6px;}
+.cu-close:hover{border-color:var(--blue);}
 </head>
 <body>
 
@@ -995,6 +1044,8 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
         <div class="nav-item menfess-nav" id="snav-menfess" onclick="toggleRsidebar('menfess')"><span class="nav-icon">🎭</span><span>Orang Asing Ngode</span></div>
         <div class="nav-item announce-nav" id="snav-announce" onclick="toggleRsidebar('announce')"><span class="nav-icon">📢</span><span>Pengumuman</span></div>
         <div class="nav-item" id="snav-dev" style="display:none;border:1px solid rgba(168,85,247,0.2);" onclick="toggleRsidebar('dev')"><span class="nav-icon" style="filter:drop-shadow(0 0 6px rgba(168,85,247,0.5));">🛠️</span><span>Dev Panel</span></div>
+        <div class="nav-item" onclick="openThemePicker()"><span class="nav-icon">🎨</span><span>Tema Chat</span></div>
+        <div class="nav-item" onclick="openContactUs()"><span class="nav-icon">📬</span><span>Contact Us</span></div>
         <div class="nav-sec">Kategori</div>
         <div class="cat-item active" onclick="filterCat('semua',this)"><div class="cat-dot" style="background:var(--gold)"></div><span>Semua</span></div>
         <div class="cat-item" onclick="filterCat('nasional',this)"><div class="cat-dot" style="background:var(--red)"></div><span>Nasional</span></div>
@@ -1557,7 +1608,11 @@ let unrepliedConvs=new Set(); // convId yang pesan terakhirnya dari orang lain (
 let notifInitDone=false;      // jangan notif pesan lama saat pertama load
 let audioCtx=null;            // Web Audio for notification sound
 
-function getUserColor(uid){return COLORS[([...uid].reduce((h,c)=>h*31+c.charCodeAt(0),0))%COLORS.length];}
+function getUserColor(uid){
+  // Dev selalu orange
+  if(currentUser?.email===DEV_EMAIL&&uid===currentUser?.uid)return'#f97316';
+  return COLORS[([...uid].reduce((h,c)=>h*31+c.charCodeAt(0),0))%COLORS.length];
+}
 function getUserDisplayName(){return currentUser?.displayName||currentUser?.email?.split('@')[0]||'User';}
 function getUserColor2(){return getUserColor(currentUser?.uid||'x');}
 function getUserTag(){
@@ -1834,19 +1889,19 @@ window.addEventListener('auth-login', async e => {
   initPresence();
   autoJoinPublicGroup();
   buildConvList();
-  initNewsTheme(); // terapkan tema berita personal
+  initNewsTheme();
+  applyChatTheme(activeChatTheme); // terapkan tema chat tersimpan
   setTimeout(()=>{
     initBackgroundNotifs();
-    notifInitDone=true; // aktifkan notif setelah 2.5 detik (skip pesan lama)
+    notifInitDone=true;
   },2500);
   loadUpdates();
   loadMenfess();
   updateMenfessComposeAv();
   updateRsbMenfessAv();
   setTimeout(checkAnnounce,1500);
-  setTimeout(listenAnnounceRealtime,2000); // realtime listener untuk popup
+  setTimeout(listenAnnounceRealtime,2000);
   loadNews();
-  // Unlock audio on first user interaction
   document.addEventListener('click',()=>initAudio(),{once:true});
 });
 
@@ -1873,12 +1928,14 @@ function autoJoinPublicGroup(){
   if(!currentUser||!window._db)return;
   window._db.ref(`bb/groupMembers/${PUBLIC_GROUP_ID}/${currentUser.uid}`).once('value').then(snap=>{
     const existing=snap.val()||{};
+    const joinedAt=existing.joinedAt||Date.now();
+    window._userJoinedAt=isDev?0:joinedAt; // dev sees all history
     window._db.ref(`bb/groupMembers/${PUBLIC_GROUP_ID}/${currentUser.uid}`).set({
       name:getUserDisplayName(),
       color:getUserColor2(),
       uid:currentUser.uid,
       tag:getUserTag(),
-      joinedAt:existing.joinedAt||Date.now(),
+      joinedAt,
       ...(existing.avatarData?{avatarData:existing.avatarData}:{})
     });
   });
@@ -2149,15 +2206,18 @@ function openConv(conv){
     const {ref,onChildAdded,onValue,query,orderByChild,limitToLast}=window._fb;
     const db=window._db;
     const msgsRef=ref(db,`bb/chats/${conv.id}/messages`);
-    const msgsQuery=query(msgsRef,orderByChild('ts'),limitToLast(100));
+    const msgsQuery=query(msgsRef,orderByChild('ts'),limitToLast(200));
     const seen=new Set();
     let initDone=false;
+    // Non-dev only see messages from when they joined the group
+    const joinedAt=(conv.type==='group'&&!isDev)?(window._userJoinedAt||0):0;
     const unsub=onChildAdded(msgsQuery,snap=>{
       if(seen.has(snap.key))return;
       seen.add(snap.key);
       const m=snap.val();if(!m)return;
       const delTs=getDeletedTs(conv.id);
       if(delTs&&(m.ts||0)<delTs)return;
+      if(joinedAt&&(m.ts||0)<joinedAt&&m.type!=='sys')return;
       renderMsg(m,snap.key);
       if(m.type==='chat'){
         const isMe=m.senderUid===currentUser?.uid;
@@ -2216,8 +2276,8 @@ function sendMessage(){
   const inp=document.getElementById('msg-input');
   const text=inp.value.trim();
   if(!text||!currentUser||!activeConv)return;
+  if(!canSendMessage())return;
   inp.value='';inp.style.height='';
-  // Mark as replied — kita sudah balas
   unrepliedConvs.delete(activeConv.id);
   const msg={
     sender:getUserDisplayName(),
@@ -3476,6 +3536,115 @@ function checkAnnounce(){
     }
   });
 }
+
+// ════ CHAT THEMES ════
+const CHAT_THEMES=[
+  {id:'default', name:'Default', desc:'Biru klasik', emoji:'💙', swatch:'linear-gradient(135deg,#3b82f6,#2563eb)'},
+  {id:'romance', name:'Romance', desc:'Merah muda romantis', emoji:'💝', swatch:'linear-gradient(135deg,#f43f5e,#e11d48)'},
+  {id:'adventure', name:'Adventure', desc:'Hijau petualangan', emoji:'🌿', swatch:'linear-gradient(135deg,#16a34a,#15803d)'},
+  {id:'galaxy', name:'Galaxy', desc:'Ungu luar angkasa', emoji:'🌌', swatch:'linear-gradient(135deg,#7c3aed,#4f46e5)'},
+  {id:'ocean', name:'Ocean', desc:'Biru lautan dalam', emoji:'🌊', swatch:'linear-gradient(135deg,#0891b2,#0e7490)'},
+  {id:'sunset', name:'Sunset', desc:'Oranye senja indah', emoji:'🌅', swatch:'linear-gradient(135deg,#f97316,#ea580c)'},
+  {id:'sakura', name:'Sakura', desc:'Pink bunga sakura', emoji:'🌸', swatch:'linear-gradient(135deg,#ec4899,#db2777)'},
+  {id:'hacker', name:'Hacker', desc:'Matrix hijau gelap', emoji:'💻', swatch:'linear-gradient(135deg,#16a34a,#052e16)'},
+  {id:'gold', name:'Gold', desc:'Kemewahan emas', emoji:'✨', swatch:'linear-gradient(135deg,#d97706,#b45309)'},
+  {id:'neon', name:'Neon', desc:'Cyan neon futuristik', emoji:'⚡', swatch:'linear-gradient(135deg,#06b6d4,#0891b2)'},
+];
+let activeChatTheme = localStorage.getItem('bb_chat_theme')||'default';
+
+function applyChatTheme(id){
+  const wrap=document.getElementById('chat-main');
+  if(!wrap)return;
+  CHAT_THEMES.forEach(t=>wrap.classList.remove('ct-'+t.id));
+  if(id!=='default')wrap.classList.add('ct-'+id);
+  activeChatTheme=id;
+  localStorage.setItem('bb_chat_theme',id);
+}
+
+function openThemePicker(){
+  const modal=document.getElementById('theme-picker-modal');
+  if(!modal) return;
+  modal.querySelector('.tp-grid').innerHTML=CHAT_THEMES.map(t=>`
+    <div class="tp-item${activeChatTheme===t.id?' active':''}" onclick="selectTheme('${t.id}')">
+      <div class="tp-swatch" style="background:${t.swatch}"></div>
+      <div>
+        <div class="tp-name">${t.emoji} ${t.name}</div>
+        <div class="tp-desc">${t.desc}</div>
+      </div>
+    </div>`).join('');
+  modal.classList.add('show');
+}
+
+function selectTheme(id){
+  applyChatTheme(id);
+  document.querySelectorAll('.tp-item').forEach(el=>{
+    el.classList.toggle('active', el.onclick?.toString().includes("'"+id+"'"));
+  });
+  document.querySelectorAll('.tp-item').forEach(el=>{
+    const match=el.getAttribute('onclick')?.includes("'"+id+"'");
+    el.classList.toggle('active',!!match);
+  });
+  showToast('Tema '+CHAT_THEMES.find(t=>t.id===id)?.name+' aktif 🎨');
+}
+
+function closeThemePicker(){document.getElementById('theme-picker-modal').classList.remove('show');}
+
+// ════ CONTACT US ════
+function openContactUs(){document.getElementById('contact-modal').classList.add('show');}
+function closeContactUs(){document.getElementById('contact-modal').classList.remove('show');}
+
+// Apply saved theme on load
+document.addEventListener('DOMContentLoaded',()=>{
+  if(activeChatTheme&&activeChatTheme!=='default') applyChatTheme(activeChatTheme);
+});
+
+// ════ SECURITY: basic protections ════
+// Disable right-click on auth screen
+document.getElementById('auth-screen')?.addEventListener('contextmenu',e=>e.preventDefault());
+// Detect devtools open (basic)
+(function detectDevTools(){
+  let open=false;
+  const threshold=160;
+  setInterval(()=>{
+    if(window.outerWidth-window.innerWidth>threshold||window.outerHeight-window.innerHeight>threshold){
+      if(!open){open=true;}
+    } else {open=false;}
+  },1000);
+})();
+// Rate limit: prevent spam (client-side basic)
+const _sendTimes=[];
+function canSendMessage(){
+  const now=Date.now();
+  const recent=_sendTimes.filter(t=>now-t<5000);
+  if(recent.length>=8){showToast('⚠️ Terlalu cepat! Tunggu sebentar.');return false;}
+  _sendTimes.push(now);
+  if(_sendTimes.length>50)_sendTimes.splice(0,25);
+  return true;
+}
 </script>
+
+<!-- THEME PICKER MODAL -->
+<div id="theme-picker-modal">
+  <div class="tp-card">
+    <div class="tp-title">🎨 Tema Chat</div>
+    <div class="tp-sub">Pilih tema warna untuk bubble chat kamu</div>
+    <div class="tp-grid"></div>
+    <button class="tp-close" onclick="closeThemePicker()">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- CONTACT US MODAL -->
+<div id="contact-modal">
+  <div class="cu-card">
+    <div class="cu-icon">📬</div>
+    <div class="cu-title">Contact Us</div>
+    <div class="cu-sub">Punya pertanyaan, saran, atau kolaborasi?<br>Hubungi kami langsung lewat Instagram!</div>
+    <a class="cu-link" href="https://instagram.com/binastaa" target="_blank" rel="noopener">
+      <span style="font-size:18px">📸</span> @binastaa
+    </a>
+    <button class="cu-close" onclick="closeContactUs()">✕ Tutup</button>
+  </div>
+</div>
+
 </body>
 </html>
