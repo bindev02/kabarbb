@@ -9,54 +9,43 @@
 
 <!-- Firebase SDK -->
 <script>
-(function() {
+(function(){
   var VER = '10.12.0';
-  var scripts = [
-    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-app-compat.js',
-    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-auth-compat.js',
-    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-database-compat.js'
-  ];
-  var fallbacks = [
-    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-app-compat.min.js',
-    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-auth-compat.min.js',
-    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-database-compat.min.js'
+  var BASE = 'https://www.gstatic.com/firebasejs/'+VER+'/';
+  var CDN2 = 'https://cdn.jsdelivr.net/npm/firebase@'+VER+'/';
+  var SDKS = [
+    [BASE+'firebase-app-compat.js',      CDN2+'firebase-app-compat.min.js'],
+    [BASE+'firebase-auth-compat.js',     CDN2+'firebase-auth-compat.min.js'],
+    [BASE+'firebase-database-compat.js', CDN2+'firebase-database-compat.min.js'],
   ];
 
-  function loadScript(src, fallback, cb) {
-    var s = document.createElement('script');
-    s.src = src;
-    s.onload = function() { cb(null); };
-    s.onerror = function() {
-      var s2 = document.createElement('script');
-      s2.src = fallback;
-      s2.onload = function() { cb(null); };
-      s2.onerror = function() { cb(new Error('Gagal load: ' + src)); };
+  function loadSeq(i){
+    if(i>=SDKS.length){ onAllLoaded(); return; }
+    var s=document.createElement('script');
+    s.src=SDKS[i][0];
+    s.onload=function(){ loadSeq(i+1); };
+    s.onerror=function(){
+      var s2=document.createElement('script');
+      s2.src=SDKS[i][1];
+      s2.onload=function(){ loadSeq(i+1); };
+      s2.onerror=function(){ showErr('Gagal load Firebase SDK #'+i); };
       document.head.appendChild(s2);
     };
     document.head.appendChild(s);
   }
 
-  function loadAll(idx) {
-    if (idx >= scripts.length) {
-      initFirebase();
-      return;
+  function showErr(msg){
+    console.error(msg);
+    function tryShow(){
+      var el=document.getElementById('login-err');
+      if(el){ el.textContent='Gagal memuat Firebase. Cek koneksi internet.'; el.classList.add('show'); }
     }
-    loadScript(scripts[idx], fallbacks[idx], function(err) {
-      if (err) {
-        console.error('Firebase SDK gagal dimuat:', err);
-        setTimeout(function() {
-          var el = document.getElementById('login-err');
-          if (el) { el.textContent = 'Gagal memuat Firebase. Cek koneksi internet kamu.'; el.classList.add('show'); }
-        }, 500);
-        return;
-      }
-      loadAll(idx + 1);
-    });
+    document.readyState==='loading'?document.addEventListener('DOMContentLoaded',tryShow):tryShow();
   }
 
-  function initFirebase() {
-    try {
-      var FIREBASE_CONFIG = {
+  function onAllLoaded(){
+    try{
+      if(!firebase.apps.length) firebase.initializeApp({
         apiKey:            "AIzaSyBYW-8ppVZ-m8qColdt_M3WHAun2MS1pFI",
         authDomain:        "beritabintang-21d15.firebaseapp.com",
         databaseURL:       "https://beritabintang-21d15-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -64,75 +53,71 @@
         storageBucket:     "beritabintang-21d15.firebasestorage.app",
         messagingSenderId: "860155341343",
         appId:             "1:860155341343:web:a5c5da15780899265a432a",
-        measurementId:     "G-BS2YWKLWNT"
-      };
-
-      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-
-      var auth = firebase.auth();
-      var db   = firebase.database();
-      var gProvider = new firebase.auth.GoogleAuthProvider();
-
-      window._auth = auth;
-      window._db   = db;
-
-      window._fb = {
-        ref:             function(d,p) { return (typeof d==='string') ? db.ref(d) : db.ref(p); },
-        push:            function(r,v) { return r.push(v); },
-        onChildAdded:    function(r,cb) { r.on('child_added', function(s){cb(s);}); return function(){r.off('child_added');}; },
-        serverTimestamp: function() { return firebase.database.ServerValue.TIMESTAMP; },
-        onValue:         function(r,cb) { r.on('value', function(s){cb(s);}); return function(){r.off('value');}; },
-        set:             function(r,v) { return r.set(v); },
-        onDisconnect:    function(r) { return r.onDisconnect(); },
-        remove:          function(r) { return r.remove(); },
-        query:           function(r) {
-          var q = r;
-          for (var i=1; i<arguments.length; i++) {
-            if (typeof arguments[i] === 'function') q = arguments[i](q);
-          }
-          return q;
-        },
-        orderByChild:    function(k) { return function(q) { return q.orderByChild(k); }; },
-        limitToLast:     function(n) { return function(q) { return q.limitToLast(n); }; },
-      };
-
-      window._fbAuth = {
-        createUserWithEmailAndPassword: function(a,e,p) { return a.createUserWithEmailAndPassword(e,p); },
-        signInWithEmailAndPassword:     function(a,e,p) { return a.signInWithEmailAndPassword(e,p); },
-        signInWithPopup:                function(a,prov) { return a.signInWithPopup(prov); },
-        signOut:                        function(a) { return a.signOut(); },
-        onAuthStateChanged:             function(a,cb) { return a.onAuthStateChanged(cb); },
-        updateProfile:                  function(u,data) { return u.updateProfile(data); },
-        EmailAuthProvider:              firebase.auth.EmailAuthProvider,
-        reauthenticateWithCredential:   function(u,c) { return u.reauthenticateWithCredential(c); },
-        gProvider:                      gProvider,
-      };
-
-      auth.onAuthStateChanged(function(user) {
-        if (user) {
-          window.dispatchEvent(new CustomEvent('auth-login', { detail: user }));
-        } else {
-          window.dispatchEvent(new Event('auth-logout'));
-        }
       });
 
-    } catch(e) {
-      console.error('Firebase init error:', e);
-      setTimeout(function() {
-        var el = document.getElementById('login-err');
-        if (el) { el.textContent = 'Gagal terhubung ke server: ' + e.message; el.classList.add('show'); }
-      }, 500);
+      var auth=firebase.auth(), db=firebase.database(), gP=new firebase.auth.GoogleAuthProvider();
+      window._auth=auth; window._db=db;
+
+      window._fb={
+        ref:function(d,p){return typeof d==='string'?db.ref(d):db.ref(p);},
+        push:function(r,v){return r.push(v);},
+        onChildAdded:function(r,cb){r.on('child_added',function(s){cb(s);});return function(){r.off('child_added');};},
+        serverTimestamp:function(){return firebase.database.ServerValue.TIMESTAMP;},
+        onValue:function(r,cb){r.on('value',function(s){cb(s);});return function(){r.off('value');};},
+        set:function(r,v){return r.set(v);},
+        onDisconnect:function(r){return r.onDisconnect();},
+        remove:function(r){return r.remove();},
+        query:function(r){var q=r;for(var i=1;i<arguments.length;i++)if(typeof arguments[i]==='function')q=arguments[i](q);return q;},
+        orderByChild:function(k){return function(q){return q.orderByChild(k);};},
+        limitToLast:function(n){return function(q){return q.limitToLast(n);};},
+      };
+
+      window._fbAuth={
+        createUserWithEmailAndPassword:function(a,e,p){return a.createUserWithEmailAndPassword(e,p);},
+        signInWithEmailAndPassword:function(a,e,p){return a.signInWithEmailAndPassword(e,p);},
+        signInWithPopup:function(a,pv){return a.signInWithPopup(pv);},
+        signOut:function(a){return a.signOut();},
+        onAuthStateChanged:function(a,cb){return a.onAuthStateChanged(cb);},
+        updateProfile:function(u,d){return u.updateProfile(d);},
+        EmailAuthProvider:firebase.auth.EmailAuthProvider,
+        reauthenticateWithCredential:function(u,c){return u.reauthenticateWithCredential(c);},
+        gProvider:gP,
+      };
+
+      // Simpan auth result, dispatch saat app siap
+      window._pendingAuthUser = undefined; // undefined = belum ada hasil
+      auth.onAuthStateChanged(function(user){
+        window._pendingAuthUser = user;
+        window._dbg('onAuthStateChanged: user=' + (user?user.email:'null'));
+        _maybeDispatchAuth();
+      });
+
+    }catch(e){
+      console.error('Firebase init error:',e);
+      showErr(e.message);
     }
   }
 
-  // Mulai load setelah DOM siap
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { loadAll(0); });
-  } else {
-    loadAll(0);
-  }
+  document.readyState==='loading'
+    ?document.addEventListener('DOMContentLoaded',function(){loadSeq(0);})
+    :loadSeq(0);
 })();
+
+// Dipanggil dari Firebase callback DAN dari akhir script utama
+window._maybeDispatchAuth = function(){
+  if(window._pendingAuthUser===undefined) return; // Firebase belum respond
+  if(!window._authListenersReady) return;          // Listener belum terpasang
+  var u = window._pendingAuthUser;
+  window._pendingAuthUser = undefined;
+  if(u){
+    window._dbg('dispatching auth-login'); window.dispatchEvent(new CustomEvent('auth-login',{detail:u}));
+  } else {
+    window._dbg('dispatching auth-logout'); window.dispatchEvent(new Event('auth-logout'));
+  }
+};
+window._authListenersReady = false;
 </script>
+
 
 
 <style>
@@ -1009,6 +994,30 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 .cu-close:hover{border-color:var(--blue);}
 </head>
 <body>
+
+<style id="debug-overlay-style">
+#debug-overlay{
+  position:fixed;top:0;left:0;right:0;z-index:99999;
+  background:rgba(0,0,0,0.92);color:#0f0;font:12px monospace;
+  padding:8px;max-height:50vh;overflow-y:auto;
+  border-bottom:2px solid #0f0;
+}
+</style>
+<div id="debug-overlay">🔍 Debug log...<br></div>
+<script>
+window._dbg = function(msg){
+  var el = document.getElementById('debug-overlay');
+  if(el){ el.innerHTML += msg + '<br>'; el.scrollTop = el.scrollHeight; }
+  console.log('[DBG]', msg);
+};
+window._dbg('DOM loaded ✓');
+window.addEventListener('error', function(e){
+  window._dbg('❌ JS ERROR: ' + e.message + ' @ line ' + e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e){
+  window._dbg('❌ PROMISE ERROR: ' + (e.reason && e.reason.message || e.reason));
+});
+</script>
 
 <!-- ══ AUTH SCREEN ══ -->
 <div id="auth-screen">
@@ -2014,6 +2023,15 @@ window.addEventListener('auth-logout',()=>{
   document.getElementById('messages-area').innerHTML='';
   activeConv=null;
 });
+
+// ── Semua auth listeners sudah terpasang ──
+window._dbg('_authListenersReady = true');
+window._authListenersReady = true;
+window._maybeDispatchAuth();
+window._dbg('_maybeDispatchAuth called');
+
+
+// Replay auth events yang mungkin sudah di-dispatch sebelum listener terpasang
 
 // ════ AUTO JOIN PUBLIC GROUP ════
 const PUBLIC_GROUP_ID='ziis-all-4gen';
@@ -3780,17 +3798,6 @@ function canSendMessage(){
 </div>
 
 
-<script>
-// Tandai app siap - dispatch pending auth jika ada
-window._appReady = true;
-if (window._pendingAuthUser !== undefined) {
-  if (window._pendingAuthUser) {
-    window.dispatchEvent(new CustomEvent('auth-login', { detail: window._pendingAuthUser }));
-  } else {
-    window.dispatchEvent(new Event('auth-logout'));
-  }
-  delete window._pendingAuthUser;
-}
-</script>
+
 </body>
 </html>
