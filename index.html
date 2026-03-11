@@ -7,76 +7,133 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Mulish:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<!-- Firebase Compat SDK (no module/import needed, langsung global) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<!-- Firebase SDK -->
 <script>
-(function(){
-  const FIREBASE_CONFIG = {
-    apiKey:            "AIzaSyBYW-8ppVZ-m8qColdt_M3WHAun2MS1pFI",
-    authDomain:        "beritabintang-21d15.firebaseapp.com",
-    databaseURL:       "https://beritabintang-21d15-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:         "beritabintang-21d15",
-    storageBucket:     "beritabintang-21d15.firebasestorage.app",
-    messagingSenderId: "860155341343",
-    appId:             "1:860155341343:web:a5c5da15780899265a432a",
-    measurementId:     "G-BS2YWKLWNT"
-  };
+(function() {
+  var VER = '10.12.0';
+  var scripts = [
+    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-auth-compat.js',
+    'https://www.gstatic.com/firebasejs/' + VER + '/firebase-database-compat.js'
+  ];
+  var fallbacks = [
+    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-app-compat.min.js',
+    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-auth-compat.min.js',
+    'https://cdn.jsdelivr.net/npm/firebase@' + VER + '/firebase-database-compat.min.js'
+  ];
 
-  try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    const auth = firebase.auth();
-    const db   = firebase.database();
-    const gProvider = new firebase.auth.GoogleAuthProvider();
-
-    // Expose ke global sama seperti sebelumnya agar semua fungsi lain tidak perlu diubah
-    window._auth = auth;
-    window._db   = db;
-
-    // Helper compat wrapper agar sintaks lama tetap bekerja
-    window._fb = {
-      ref:            (d,p)   => { if(typeof d==='string') return db.ref(d); return db.ref(p); },
-      push:           (r,v)   => r.push(v),
-      onChildAdded:   (r,cb)  => { r.on('child_added', s => cb(s)); return ()=>r.off('child_added'); },
-      serverTimestamp:()      => firebase.database.ServerValue.TIMESTAMP,
-      onValue:        (r,cb)  => { r.on('value', s => cb(s)); return ()=>r.off('value'); },
-      set:            (r,v)   => r.set(v),
-      onDisconnect:   (r)     => r.onDisconnect(),
-      remove:         (r)     => r.remove(),
-      query:          (r,...mods) => { let q=r; mods.forEach(mod=>{ if(typeof mod==='function') q=mod(q); }); return q; },
-      orderByChild:   (k)     => q => q.orderByChild(k),
-      limitToLast:    (n)     => q => q.limitToLast(n),
+  function loadScript(src, fallback, cb) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = function() { cb(null); };
+    s.onerror = function() {
+      var s2 = document.createElement('script');
+      s2.src = fallback;
+      s2.onload = function() { cb(null); };
+      s2.onerror = function() { cb(new Error('Gagal load: ' + src)); };
+      document.head.appendChild(s2);
     };
+    document.head.appendChild(s);
+  }
 
-    window._fbAuth = {
-      createUserWithEmailAndPassword: (a,e,p) => a.createUserWithEmailAndPassword(e,p),
-      signInWithEmailAndPassword:     (a,e,p) => a.signInWithEmailAndPassword(e,p),
-      signInWithPopup:                (a,prov) => a.signInWithPopup(prov),
-      signOut:                        (a)      => a.signOut(),
-      onAuthStateChanged:             (a,cb)   => a.onAuthStateChanged(cb),
-      updateProfile:                  (u,data) => u.updateProfile(data),
-      EmailAuthProvider:              firebase.auth.EmailAuthProvider,
-      reauthenticateWithCredential:   (u,c)    => u.reauthenticateWithCredential(c),
-      gProvider,
-    };
-
-    // Auth state — sudah sync, tidak ada race condition
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        window.dispatchEvent(new CustomEvent('auth-login', { detail: user }));
-      } else {
-        window.dispatchEvent(new Event('auth-logout'));
+  function loadAll(idx) {
+    if (idx >= scripts.length) {
+      initFirebase();
+      return;
+    }
+    loadScript(scripts[idx], fallbacks[idx], function(err) {
+      if (err) {
+        console.error('Firebase SDK gagal dimuat:', err);
+        setTimeout(function() {
+          var el = document.getElementById('login-err');
+          if (el) { el.textContent = 'Gagal memuat Firebase. Cek koneksi internet kamu.'; el.classList.add('show'); }
+        }, 500);
+        return;
       }
+      loadAll(idx + 1);
     });
+  }
 
-  } catch(e) {
-    console.error('Firebase init error:', e);
-    document.getElementById('login-err').textContent = 'Gagal terhubung ke server. Refresh halaman.';
-    document.getElementById('login-err').classList.add('show');
+  function initFirebase() {
+    try {
+      var FIREBASE_CONFIG = {
+        apiKey:            "AIzaSyBYW-8ppVZ-m8qColdt_M3WHAun2MS1pFI",
+        authDomain:        "beritabintang-21d15.firebaseapp.com",
+        databaseURL:       "https://beritabintang-21d15-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId:         "beritabintang-21d15",
+        storageBucket:     "beritabintang-21d15.firebasestorage.app",
+        messagingSenderId: "860155341343",
+        appId:             "1:860155341343:web:a5c5da15780899265a432a",
+        measurementId:     "G-BS2YWKLWNT"
+      };
+
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+
+      var auth = firebase.auth();
+      var db   = firebase.database();
+      var gProvider = new firebase.auth.GoogleAuthProvider();
+
+      window._auth = auth;
+      window._db   = db;
+
+      window._fb = {
+        ref:             function(d,p) { return (typeof d==='string') ? db.ref(d) : db.ref(p); },
+        push:            function(r,v) { return r.push(v); },
+        onChildAdded:    function(r,cb) { r.on('child_added', function(s){cb(s);}); return function(){r.off('child_added');}; },
+        serverTimestamp: function() { return firebase.database.ServerValue.TIMESTAMP; },
+        onValue:         function(r,cb) { r.on('value', function(s){cb(s);}); return function(){r.off('value');}; },
+        set:             function(r,v) { return r.set(v); },
+        onDisconnect:    function(r) { return r.onDisconnect(); },
+        remove:          function(r) { return r.remove(); },
+        query:           function(r) {
+          var q = r;
+          for (var i=1; i<arguments.length; i++) {
+            if (typeof arguments[i] === 'function') q = arguments[i](q);
+          }
+          return q;
+        },
+        orderByChild:    function(k) { return function(q) { return q.orderByChild(k); }; },
+        limitToLast:     function(n) { return function(q) { return q.limitToLast(n); }; },
+      };
+
+      window._fbAuth = {
+        createUserWithEmailAndPassword: function(a,e,p) { return a.createUserWithEmailAndPassword(e,p); },
+        signInWithEmailAndPassword:     function(a,e,p) { return a.signInWithEmailAndPassword(e,p); },
+        signInWithPopup:                function(a,prov) { return a.signInWithPopup(prov); },
+        signOut:                        function(a) { return a.signOut(); },
+        onAuthStateChanged:             function(a,cb) { return a.onAuthStateChanged(cb); },
+        updateProfile:                  function(u,data) { return u.updateProfile(data); },
+        EmailAuthProvider:              firebase.auth.EmailAuthProvider,
+        reauthenticateWithCredential:   function(u,c) { return u.reauthenticateWithCredential(c); },
+        gProvider:                      gProvider,
+      };
+
+      auth.onAuthStateChanged(function(user) {
+        if (user) {
+          window.dispatchEvent(new CustomEvent('auth-login', { detail: user }));
+        } else {
+          window.dispatchEvent(new Event('auth-logout'));
+        }
+      });
+
+    } catch(e) {
+      console.error('Firebase init error:', e);
+      setTimeout(function() {
+        var el = document.getElementById('login-err');
+        if (el) { el.textContent = 'Gagal terhubung ke server: ' + e.message; el.classList.add('show'); }
+      }, 500);
+    }
+  }
+
+  // Mulai load setelah DOM siap
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { loadAll(0); });
+  } else {
+    loadAll(0);
   }
 })();
 </script>
+
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -3722,5 +3779,18 @@ function canSendMessage(){
   </div>
 </div>
 
+
+<script>
+// Tandai app siap - dispatch pending auth jika ada
+window._appReady = true;
+if (window._pendingAuthUser !== undefined) {
+  if (window._pendingAuthUser) {
+    window.dispatchEvent(new CustomEvent('auth-login', { detail: window._pendingAuthUser }));
+  } else {
+    window.dispatchEvent(new Event('auth-logout'));
+  }
+  delete window._pendingAuthUser;
+}
+</script>
 </body>
 </html>
