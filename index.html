@@ -7,116 +7,74 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Mulish:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<!-- Firebase SDK -->
+<!-- Firebase SDK (file lokal - tidak bergantung CDN) -->
+<script src="firebase-app.js"></script>
+<script src="firebase-auth.js"></script>
+<script src="firebase-database.js"></script>
 <script>
-(function(){
-  var VER = '10.12.0';
-  var BASE = 'https://www.gstatic.com/firebasejs/'+VER+'/';
-  var CDN2 = 'https://cdn.jsdelivr.net/npm/firebase@'+VER+'/';
-  var SDKS = [
-    [BASE+'firebase-app-compat.js',      CDN2+'firebase-app-compat.min.js'],
-    [BASE+'firebase-auth-compat.js',     CDN2+'firebase-auth-compat.min.js'],
-    [BASE+'firebase-database-compat.js', CDN2+'firebase-database-compat.min.js'],
-  ];
+firebase.initializeApp({
+  apiKey:            "AIzaSyBYW-8ppVZ-m8qColdt_M3WHAun2MS1pFI",
+  authDomain:        "beritabintang-21d15.firebaseapp.com",
+  databaseURL:       "https://beritabintang-21d15-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "beritabintang-21d15",
+  storageBucket:     "beritabintang-21d15.firebasestorage.app",
+  messagingSenderId: "860155341343",
+  appId:             "1:860155341343:web:a5c5da15780899265a432a",
+});
 
-  function loadSeq(i){
-    if(i>=SDKS.length){ onAllLoaded(); return; }
-    var s=document.createElement('script');
-    s.src=SDKS[i][0];
-    s.onload=function(){ loadSeq(i+1); };
-    s.onerror=function(){
-      var s2=document.createElement('script');
-      s2.src=SDKS[i][1];
-      s2.onload=function(){ loadSeq(i+1); };
-      s2.onerror=function(){ showErr('Gagal load Firebase SDK #'+i); };
-      document.head.appendChild(s2);
-    };
-    document.head.appendChild(s);
-  }
+var _auth = firebase.auth();
+var _db   = firebase.database();
+window._auth = _auth;
+window._db   = _db;
 
-  function showErr(msg){
-    console.error(msg);
-    function tryShow(){
-      var el=document.getElementById('login-err');
-      if(el){ el.textContent='Gagal memuat Firebase. Cek koneksi internet.'; el.classList.add('show'); }
-    }
-    document.readyState==='loading'?document.addEventListener('DOMContentLoaded',tryShow):tryShow();
-  }
-
-  function onAllLoaded(){
-    try{
-      if(!firebase.apps.length) firebase.initializeApp({
-        apiKey:            "AIzaSyBYW-8ppVZ-m8qColdt_M3WHAun2MS1pFI",
-        authDomain:        "beritabintang-21d15.firebaseapp.com",
-        databaseURL:       "https://beritabintang-21d15-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId:         "beritabintang-21d15",
-        storageBucket:     "beritabintang-21d15.firebasestorage.app",
-        messagingSenderId: "860155341343",
-        appId:             "1:860155341343:web:a5c5da15780899265a432a",
-      });
-
-      var auth=firebase.auth(), db=firebase.database(), gP=new firebase.auth.GoogleAuthProvider();
-      window._auth=auth; window._db=db;
-
-      window._fb={
-        ref:function(d,p){return typeof d==='string'?db.ref(d):db.ref(p);},
-        push:function(r,v){return r.push(v);},
-        onChildAdded:function(r,cb){r.on('child_added',function(s){cb(s);});return function(){r.off('child_added');};},
-        serverTimestamp:function(){return firebase.database.ServerValue.TIMESTAMP;},
-        onValue:function(r,cb){r.on('value',function(s){cb(s);});return function(){r.off('value');};},
-        set:function(r,v){return r.set(v);},
-        onDisconnect:function(r){return r.onDisconnect();},
-        remove:function(r){return r.remove();},
-        query:function(r){var q=r;for(var i=1;i<arguments.length;i++)if(typeof arguments[i]==='function')q=arguments[i](q);return q;},
-        orderByChild:function(k){return function(q){return q.orderByChild(k);};},
-        limitToLast:function(n){return function(q){return q.limitToLast(n);};},
-      };
-
-      window._fbAuth={
-        createUserWithEmailAndPassword:function(a,e,p){return a.createUserWithEmailAndPassword(e,p);},
-        signInWithEmailAndPassword:function(a,e,p){return a.signInWithEmailAndPassword(e,p);},
-        signInWithPopup:function(a,pv){return a.signInWithPopup(pv);},
-        signOut:function(a){return a.signOut();},
-        onAuthStateChanged:function(a,cb){return a.onAuthStateChanged(cb);},
-        updateProfile:function(u,d){return u.updateProfile(d);},
-        EmailAuthProvider:firebase.auth.EmailAuthProvider,
-        reauthenticateWithCredential:function(u,c){return u.reauthenticateWithCredential(c);},
-        gProvider:gP,
-      };
-
-      // Simpan auth result, dispatch saat app siap
-      window._pendingAuthUser = undefined; // undefined = belum ada hasil
-      auth.onAuthStateChanged(function(user){
-        window._pendingAuthUser = user;
-        window._dbg('onAuthStateChanged: user=' + (user?user.email:'null'));
-        _maybeDispatchAuth();
-      });
-
-    }catch(e){
-      console.error('Firebase init error:',e);
-      showErr(e.message);
-    }
-  }
-
-  document.readyState==='loading'
-    ?document.addEventListener('DOMContentLoaded',function(){loadSeq(0);})
-    :loadSeq(0);
-})();
-
-// Dipanggil dari Firebase callback DAN dari akhir script utama
-window._maybeDispatchAuth = function(){
-  if(window._pendingAuthUser===undefined) return; // Firebase belum respond
-  if(!window._authListenersReady) return;          // Listener belum terpasang
-  var u = window._pendingAuthUser;
-  window._pendingAuthUser = undefined;
-  if(u){
-    window._dbg('dispatching auth-login'); window.dispatchEvent(new CustomEvent('auth-login',{detail:u}));
-  } else {
-    window._dbg('dispatching auth-logout'); window.dispatchEvent(new Event('auth-logout'));
-  }
+window._fb = {
+  ref:             function(d,p){ return typeof d==='string' ? _db.ref(d) : _db.ref(p); },
+  push:            function(r,v){ return r.push(v); },
+  onChildAdded:    function(r,cb){ r.on('child_added',function(s){cb(s);}); return function(){r.off('child_added');}; },
+  serverTimestamp: function(){ return firebase.database.ServerValue.TIMESTAMP; },
+  onValue:         function(r,cb){ r.on('value',function(s){cb(s);}); return function(){r.off('value');}; },
+  set:             function(r,v){ return r.set(v); },
+  onDisconnect:    function(r){ return r.onDisconnect(); },
+  remove:          function(r){ return r.remove(); },
+  query:           function(r){
+    var q=r;
+    for(var i=1;i<arguments.length;i++) if(typeof arguments[i]==='function') q=arguments[i](q);
+    return q;
+  },
+  orderByChild: function(k){ return function(q){ return q.orderByChild(k); }; },
+  limitToLast:  function(n){ return function(q){ return q.limitToLast(n); }; },
 };
+
+var _gP = new firebase.auth.GoogleAuthProvider();
+window._fbAuth = {
+  createUserWithEmailAndPassword: function(a,e,p){ return a.createUserWithEmailAndPassword(e,p); },
+  signInWithEmailAndPassword:     function(a,e,p){ return a.signInWithEmailAndPassword(e,p); },
+  signInWithPopup:                function(a,pv){ return a.signInWithPopup(pv); },
+  signOut:                        function(a){ return a.signOut(); },
+  onAuthStateChanged:             function(a,cb){ return a.onAuthStateChanged(cb); },
+  updateProfile:                  function(u,d){ return u.updateProfile(d); },
+  EmailAuthProvider:              firebase.auth.EmailAuthProvider,
+  reauthenticateWithCredential:   function(u,c){ return u.reauthenticateWithCredential(c); },
+  gProvider: _gP,
+};
+
+// Auth state - simpan dulu, dispatch setelah listener siap
+window._pendingAuthUser = undefined;
 window._authListenersReady = false;
+window._dispatchAuth = function(user) {
+  if (user) window.dispatchEvent(new CustomEvent('auth-login', {detail: user}));
+  else       window.dispatchEvent(new Event('auth-logout'));
+};
+
+_auth.onAuthStateChanged(function(user) {
+  window._pendingAuthUser = user;
+  if (window._authListenersReady) {
+    window._dispatchAuth(user);
+    window._pendingAuthUser = undefined;
+  }
+});
 </script>
+
 
 
 
@@ -995,29 +953,7 @@ body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--text)}
 </head>
 <body>
 
-<style id="debug-overlay-style">
-#debug-overlay{
-  position:fixed;top:0;left:0;right:0;z-index:99999;
-  background:rgba(0,0,0,0.92);color:#0f0;font:12px monospace;
-  padding:8px;max-height:50vh;overflow-y:auto;
-  border-bottom:2px solid #0f0;
-}
-</style>
-<div id="debug-overlay">🔍 Debug log...<br></div>
-<script>
-window._dbg = function(msg){
-  var el = document.getElementById('debug-overlay');
-  if(el){ el.innerHTML += msg + '<br>'; el.scrollTop = el.scrollHeight; }
-  console.log('[DBG]', msg);
-};
-window._dbg('DOM loaded ✓');
-window.addEventListener('error', function(e){
-  window._dbg('❌ JS ERROR: ' + e.message + ' @ line ' + e.lineno);
-});
-window.addEventListener('unhandledrejection', function(e){
-  window._dbg('❌ PROMISE ERROR: ' + (e.reason && e.reason.message || e.reason));
-});
-</script>
+
 
 <!-- ══ AUTH SCREEN ══ -->
 <div id="auth-screen">
@@ -1110,7 +1046,7 @@ window.addEventListener('unhandledrejection', function(e){
         <div class="nav-item menfess-nav" id="snav-menfess" onclick="toggleRsidebar('menfess')"><span class="nav-icon">🎭</span><span>Orang Asing Ngode</span></div>
         <div class="nav-item announce-nav" id="snav-announce" onclick="toggleRsidebar('announce')"><span class="nav-icon">📢</span><span>Pengumuman</span></div>
         <div class="nav-item" id="snav-dev" style="display:none;border:1px solid rgba(168,85,247,0.2);" onclick="toggleRsidebar('dev')"><span class="nav-icon" style="filter:drop-shadow(0 0 6px rgba(168,85,247,0.5));">🛠️</span><span>Dev Panel</span></div>
-        <div class="nav-item" onclick="openThemePicker()"><span class="nav-icon">🎨</span><span>Tema Chat</span></div>
+        <div class="nav-item" onclick="openThemePicker()"><span class="nav-icon">🎨</span><span>Tema Rekayasa</span></div>
         <div class="nav-item" onclick="openContactUs()"><span class="nav-icon">📬</span><span>Contact Us</span></div>
         <div class="nav-sec">Kategori</div>
         <div class="cat-item active" onclick="filterCat('semua',this)"><div class="cat-dot" style="background:var(--gold)"></div><span>Semua</span></div>
@@ -1135,6 +1071,7 @@ window.addEventListener('unhandledrejection', function(e){
     <div id="topbar">
       <div class="ttab active" id="tb-berita" onclick="switchTab('berita')"><span>🌏</span> Berita Terkini</div>
       <div class="ttab" id="tb-chat" onclick="switchTab('chat')"><span>🎡</span> Tempat Rekayasa</div>
+      <div class="ttab" id="tb-menfess" onclick="switchTab('menfess')"><span>🎭</span> Menfess Publik</div>
       <div class="ttab" onclick="showToast('Segera hadir!')"><span>📡</span> Breaking News</div>
       <div class="topbar-right">
         <div class="search-bar"><span>🔍</span><input type="text" placeholder="Cari berita..." oninput="searchNews(this.value)"></div>
@@ -1300,9 +1237,52 @@ window.addEventListener('unhandledrejection', function(e){
             <span class="btn-icon">＋</span><span>Post Update Baru</span>
           </button>
         </div>
+        <!-- SUPERDEV ONLY: Grant/Revoke Dev -->
+        <div class="rsb-dev-section" id="rsb-superdev-section" style="display:none;">
+          <div class="rsb-dev-section-title">👑 Kelola Status Dev</div>
+          <div style="font-size:10.5px;color:var(--text2);margin-bottom:8px;">Masukkan tag pengguna (@nama#1234) untuk memberi atau mencabut status dev. Dev yang diberi dapat broadcast popup tapi tidak bisa hapus pesan orang lain.</div>
+          <input id="grant-dev-tag" type="text" placeholder="@nama#1234" maxlength="30" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:7px;">
+          <div id="grant-dev-err" style="font-size:10.5px;color:var(--red);margin-bottom:6px;display:none;"></div>
+          <div style="display:flex;gap:6px;">
+            <button class="rsb-dev-btn" style="flex:1;margin-bottom:0;" onclick="grantDevByTag(true)"><span>✅</span><span>Beri Dev</span></button>
+            <button class="rsb-dev-btn danger" style="flex:1;margin-bottom:0;" onclick="grantDevByTag(false)"><span>❌</span><span>Cabut Dev</span></button>
+          </div>
+          <div id="granted-devs-list" style="margin-top:10px;"></div>
+        </div>
       </div>
     </div>
   </div>
+
+    <!-- PANEL MENFESS PUBLIK -->
+    <div class="tab-panel" id="panel-menfess">
+      <div style="height:100%;display:flex;flex-direction:column;overflow:hidden;">
+        <div style="padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+          <div style="font-family:'Playfair Display',serif;font-size:21px;font-weight:700;background:linear-gradient(135deg,#f97316,#ec4899,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🎭 Menfess Publik</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px;">Curhatan anonim dari seluruh pengguna · semua bisa lihat</div>
+        </div>
+        <!-- Compose box -->
+        <div style="padding:12px 18px;border-bottom:1px solid var(--border);flex-shrink:0;">
+          <div style="background:var(--card);border:1.5px solid var(--border2);border-radius:16px;padding:12px 14px;transition:border-color 0.2s;" id="menfess-compose-box">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span id="menfess-tab-av" style="font-size:18px;">👤</span>
+              <span style="font-size:11px;font-weight:700;color:#f97316;letter-spacing:0.05em;">ORANG ASING</span>
+              <span style="font-size:9px;color:var(--text3);margin-left:auto;">Identitasmu tersembunyi</span>
+            </div>
+            <textarea id="menfess-tab-input" placeholder="Tulis menfessmu... semua orang bisa lihat" maxlength="500"
+              style="width:100%;background:transparent;border:none;outline:none;color:var(--text);font-family:'Mulish',sans-serif;font-size:13px;resize:none;line-height:1.6;min-height:60px;max-height:120px;"
+              oninput="this.style.height='';this.style.height=Math.min(this.scrollHeight,120)+'px';document.getElementById('menfess-tab-char').textContent=this.value.length+'/500'"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+              <span id="menfess-tab-char" style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;">0/500</span>
+              <button onclick="postTabMenfess()" style="padding:7px 18px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:16px;color:white;font-family:'Mulish',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Kirim 🎭</button>
+            </div>
+          </div>
+        </div>
+        <!-- Feed -->
+        <div id="menfess-tab-feed" style="flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px;">
+          <div style="text-align:center;color:var(--text3);font-size:12px;padding:20px;">Memuat menfess...</div>
+        </div>
+      </div>
+    </div>
 
 </div><!-- end #app -->
 
@@ -2025,12 +2005,12 @@ window.addEventListener('auth-logout',()=>{
 });
 
 // ── Semua auth listeners sudah terpasang ──
-window._dbg('_authListenersReady = true');
 window._authListenersReady = true;
-window._maybeDispatchAuth();
-window._dbg('_maybeDispatchAuth called');
-
-
+// Kalau Firebase sudah dapat auth state sebelum ini, dispatch sekarang
+if (window._pendingAuthUser !== undefined) {
+  window._dispatchAuth(window._pendingAuthUser);
+  window._pendingAuthUser = undefined;
+}
 // Replay auth events yang mungkin sudah di-dispatch sebelum listener terpasang
 
 // ════ AUTO JOIN PUBLIC GROUP ════
@@ -2472,7 +2452,7 @@ function renderMsg(m,msgKey){
     <div class="msg-av" style="background:${bg};color:${tc}">${ini(m.sender)}</div>
     <div class="msg-content">
       ${!mine&&!isConsec?`<div class="msg-sender" style="color:${color}">${escH(m.sender||'')}</div>`:''}
-      <div class="msg-bubble" oncontextmenu="showMsgCtx(event,'${msgKey||''}','${mine}','${escH(m.text||'').replace(/'/g,"\\'")}',${mine||isDev})">${escH(m.text).replace(/\n/g,'<br>')}</div>
+      <div class="msg-bubble" oncontextmenu="showMsgCtx(event,'${msgKey||''}','${mine}','${escH(m.text||'').replace(/'/g,"\\'")}',${mine||isSuperDev})">${escH(m.text).replace(/\n/g,'<br>')}</div>
       <div class="msg-meta"><span class="msg-time">${ts}</span></div>
     </div>
     ${adminActions}`;
@@ -2878,7 +2858,7 @@ function showMsgCtx(e, key, mineStr, text, canDelAllStr){
   _msgCtx={key,mine,text,canDelAll};
   const menu=document.getElementById('msg-ctx-menu');
   // Show "hapus untuk semua" only for own messages or dev
-  document.getElementById('msg-ctx-del-all').style.display=(mine||isDev)&&key?'flex':'none';
+  document.getElementById('msg-ctx-del-all').style.display=(mine||isSuperDev)&&key?'flex':'none';
   menu.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
   menu.style.top=Math.min(e.clientY,window.innerHeight-130)+'px';
   menu.classList.add('show');
@@ -3030,17 +3010,91 @@ function ctxDeleteConv(){
 // ════ UPDATE SYSTEM ════
 const DEV_EMAIL='bintangaryasatya89@gmail.com';
 let isDev=false;
+let isSuperDev=false; // hanya bintangaryasatya89@gmail.com
 let selectedPuTag='fitur baru';
 let updateLoaded=false;
 
 function checkDevAccess(){
-  isDev=currentUser?.email===DEV_EMAIL;
-  // Show dev actions in old sidebar update section (compat)
+  isSuperDev=currentUser?.email===DEV_EMAIL;
+  isDev=isSuperDev;
+  // Cek apakah user ini diberi status dev oleh superdev
+  if(!isDev&&currentUser&&window._db){
+    window._db.ref('bb/grantedDevs/'+currentUser.uid).once('value').then(snap=>{
+      if(snap.val()===true){
+        isDev=true;
+        _applyDevUI();
+      }
+    });
+  }
+  _applyDevUI();
+}
+function _applyDevUI(){
   const sba=document.getElementById('sb-update-dev-actions');
   if(sba)sba.style.display=isDev?'flex':'none';
-  // Show dev nav item in left sidebar
   const devNav=document.getElementById('snav-dev');
   if(devNav)devNav.style.display=isDev?'flex':'none';
+  // Tampilkan tombol manage dev hanya untuk superdev
+  const sdSection=document.getElementById('rsb-superdev-section');
+  if(sdSection)sdSection.style.display=isSuperDev?'block':'none';
+}
+
+// ════ GRANT DEV FUNCTIONS ════
+async function grantDevByTag(grant){
+  if(!isSuperDev||!window._db)return;
+  const tagInput=document.getElementById('grant-dev-tag').value.trim();
+  const errEl=document.getElementById('grant-dev-err');
+  errEl.style.display='none';
+  if(!tagInput){errEl.textContent='Masukkan tag pengguna!';errEl.style.display='block';return;}
+  // Cari user berdasarkan tag di bb/groupMembers
+  let foundUid=null, foundName=null;
+  const snap=await window._db.ref('bb/groupMembers/'+PUBLIC_GROUP_ID).once('value');
+  snap.forEach(c=>{
+    const d=c.val();
+    if(d&&d.tag&&tagInput.toLowerCase().includes(d.tag.toLowerCase())){
+      foundUid=c.key; foundName=d.name||'User';
+    }
+  });
+  if(!foundUid){
+    // Coba cari di bb/users juga
+    const usnap=await window._db.ref('bb/users').once('value');
+    usnap.forEach(c=>{
+      const d=c.val();
+      if(d&&d.tag&&tagInput.toLowerCase().includes(d.tag.toLowerCase())){
+        foundUid=c.key; foundName=d.name||'User';
+      }
+    });
+  }
+  if(!foundUid){errEl.textContent='Pengguna tidak ditemukan. Pastikan tag benar.';errEl.style.display='block';return;}
+  if(foundUid===currentUser.uid){errEl.textContent='Tidak bisa mengubah status diri sendiri.';errEl.style.display='block';return;}
+  await window._db.ref('bb/grantedDevs/'+foundUid).set(grant?true:null);
+  showToast(grant?`✅ ${foundName} sekarang berstatus Dev!`:`❌ Status Dev ${foundName} dicabut.`);
+  document.getElementById('grant-dev-tag').value='';
+  loadGrantedDevsList();
+}
+
+function loadGrantedDevsList(){
+  if(!isSuperDev||!window._db)return;
+  const el=document.getElementById('granted-devs-list');
+  if(!el)return;
+  window._db.ref('bb/grantedDevs').once('value').then(snap=>{
+    const uids=[];
+    snap.forEach(c=>{if(c.val()===true)uids.push(c.key);});
+    if(!uids.length){el.innerHTML='<div style="font-size:10px;color:var(--text3);">Belum ada dev yang di-grant.</div>';return;}
+    // Ambil nama mereka
+    const proms=uids.map(uid=>window._db.ref('bb/groupMembers/'+PUBLIC_GROUP_ID+'/'+uid).once('value'));
+    Promise.all(proms).then(snaps=>{
+      el.innerHTML='<div style="font-size:10px;color:var(--text3);margin-bottom:5px;">Dev yang di-grant:</div>'+
+        snaps.map((s,i)=>{
+          const d=s.val();
+          const name=d?.name||'User';
+          const tag=d?.tag?`#${d.tag}`:'';
+          return`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:var(--card2);border-radius:6px;margin-bottom:4px;">
+            <span style="font-size:11px;color:var(--text);">${escH(name)} <span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:9px;">${escH(tag)}</span></span>
+            <span style="cursor:pointer;font-size:10px;" onclick="window._db.ref('bb/grantedDevs/${uids[i]}').remove().then(()=>{showToast('Dev dicabut');loadGrantedDevsList();})">❌</span>
+          </div>`;
+        }).join('');
+    });
+  });
 }
 
 function loadUpdates(){
@@ -3581,6 +3635,9 @@ function updateRsbMenfessAvInternal(){
 function loadMenfess(){
   if(!window._db)return;
   window._db.ref('bb/menfess').orderByChild('ts').on('value',snap=>{
+    // Refresh tab menfess juga kalau sedang terbuka
+    const tabFeedEl=document.getElementById('menfess-tab-feed');
+    if(tabFeedEl&&document.getElementById('panel-menfess')?.classList.contains('active')) loadTabMenfess();
     const feed=document.getElementById('sb-menfess-list');
     if(!feed)return;
     const items=[];
@@ -3643,6 +3700,63 @@ async function reactMenfess(key,emoji){
 async function deleteMenfess(key){
   if(!window._db||!confirm('Hapus menfess ini?'))return;
   await window._db.ref('bb/menfess/'+key).remove();
+}
+
+// ════ MENFESS TAB (panel publik) ════
+function loadTabMenfess(){
+  if(!window._db)return;
+  const feed=document.getElementById('menfess-tab-feed');
+  if(!feed)return;
+  // Update avatar
+  const av=document.getElementById('menfess-tab-av');
+  if(av){const id=getMyAnonIdentity();av.textContent=id.emoji||'👤';}
+  window._db.ref('bb/menfess').orderByChild('ts').on('value',snap=>{
+    const items=[];
+    snap.forEach(c=>items.unshift({...c.val(),key:c.key}));
+    if(!items.length){
+      feed.innerHTML='<div style="text-align:center;color:var(--text3);font-size:12px;padding:30px 20px;opacity:0.7;">Belum ada menfess. Jadilah yang pertama! 🎭</div>';
+      return;
+    }
+    const myId=getMyAnonIdentity().anonId;
+    feed.innerHTML=items.map(m=>{
+      const reacts=['😂','❤️','👏','🔥','💯'];
+      const reactHtml=reacts.map(r=>{
+        const count=Object.values(m.reactions||{}).filter(v=>v===r).length;
+        const myReact=m.reactions?.[myId]===r;
+        return`<button style="padding:3px 9px;border-radius:16px;background:${myReact?'rgba(249,115,22,0.12)':'var(--card2)'};border:1px solid ${myReact?'#f97316':'var(--border)'};font-size:11.5px;cursor:pointer;color:${myReact?'#f97316':'var(--text2)'};transition:all 0.14s;" onclick="reactMenfess('${m.key}','${r}')">${r}${count>0?' '+count:''}</button>`;
+      }).join('');
+      const canDel=isDev||(myId&&m.anonId===myId);
+      return`<div style="background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;transition:border-color 0.18s;" onmouseover="this.style.borderColor='rgba(249,115,22,0.3)'" onmouseout="this.style.borderColor='var(--border2)'">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
+          <span style="font-size:18px;">${m.emoji||'👤'}</span>
+          <span style="font-size:11.5px;font-weight:700;color:#f97316;flex:1;">${escH(m.name||'ORANG ASING')}</span>
+          <span style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;">${new Date(m.ts||Date.now()).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
+          ${canDel?`<span style="cursor:pointer;color:var(--text3);font-size:11px;padding:2px 5px;" onclick="deleteMenfess('${m.key}')">🗑</span>`:''}
+        </div>
+        <div style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:9px;">${escH(m.text||'').replace(/\n/g,'<br>')}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">${reactHtml}</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+async function postTabMenfess(){
+  const inp=document.getElementById('menfess-tab-input');
+  const text=inp?.value.trim();
+  if(!text||!currentUser||!window._db){showToast('Tulis dulu menfessnya!');return;}
+  const {emoji,name,anonId}=getMyAnonIdentity();
+  const btn=document.querySelector('#panel-menfess button[onclick="postTabMenfess()"]');
+  if(btn){btn.disabled=true;btn.textContent='...';}
+  try{
+    await window._db.ref('bb/menfess').push({text,emoji,name,anonId,ts:Date.now(),reactions:{}});
+    inp.value='';inp.style.height='';
+    document.getElementById('menfess-tab-char').textContent='0/500';
+    showToast('Menfess dikirim! Semua bisa lihat. 🎭');
+  }catch(e){
+    showToast('Gagal kirim, coba lagi.');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Kirim 🎭';}
+  }
 }
 
 // ════ ANNOUNCE SYSTEM (DEV ONLY) ════
@@ -3777,7 +3891,7 @@ function canSendMessage(){
 <!-- THEME PICKER MODAL -->
 <div id="theme-picker-modal">
   <div class="tp-card">
-    <div class="tp-title">🎨 Tema Chat</div>
+    <div class="tp-title">🎨 Tema Rekayasa</div>
     <div class="tp-sub">Pilih tema warna untuk bubble chat kamu</div>
     <div class="tp-grid"></div>
     <button class="tp-close" onclick="closeThemePicker()">✕ Tutup</button>
